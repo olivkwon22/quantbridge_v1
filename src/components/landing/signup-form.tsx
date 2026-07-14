@@ -1,8 +1,18 @@
+"use client";
+
+import { useActionState } from "react";
+import { initialSignupState, submitSignup } from "@/app/actions";
+
 const inputClass =
   "w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none";
 const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
 
 export function SignupForm() {
+  const [state, formAction, pending] = useActionState(
+    submitSignup,
+    initialSignupState,
+  );
+
   return (
     <section id="signup" className="border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-24">
@@ -17,7 +27,7 @@ export function SignupForm() {
             </p>
           </div>
 
-          <form className="mt-8 space-y-5">
+          <form action={formAction} className="mt-8 space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className={labelClass}>
@@ -171,11 +181,22 @@ export function SignupForm() {
               </div>
             </div>
 
+            {state.status !== "idle" && (
+              <p
+                className={`text-sm ${
+                  state.status === "success" ? "text-accent" : "text-red-400"
+                }`}
+              >
+                {state.message}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full rounded-md bg-accent px-4 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              disabled={pending}
+              className="w-full rounded-md bg-accent px-4 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Request Access
+              {pending ? "Submitting..." : "Request Access"}
             </button>
           </form>
         </div>

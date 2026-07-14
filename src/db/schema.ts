@@ -2,10 +2,16 @@ import { pgTable, uuid, text, integer, timestamp } from "drizzle-orm/pg-core";
 
 export const accounts = pgTable("accounts", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull().unique(),
   country: text("country"),
+  sex: text("sex"),
   background: text("background"),
+  school: text("school"),
+  major: text("major"),
+  graduationYear: integer("graduation_year"),
+  profession: text("profession"),
   lifecycleStage: text("lifecycle_stage").notNull().default("onboarding"),
   healthScore: integer("health_score").default(0),
   utmSource: text("utm_source"),
