@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSessionFromRequest } from "@/lib/session";
 
 export async function proxy(request: NextRequest) {
-  const isLoginPage = request.nextUrl.pathname.startsWith("/login");
+  const isLoginPage = request.nextUrl.pathname === "/login";
   const session = getSessionFromRequest(request);
 
   if (!session && !isLoginPage) {
