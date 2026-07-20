@@ -2,35 +2,22 @@
   "name": "quantbridge",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.110.0",
-    "drizzle-orm": "^0.45.2",
-    "next": "16.2.10",
-    "postgres": "^3.4.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "resend": "^6.16.0"
+    "dev": "concurrently -n landing,admin -c blue,green \"npm:dev:landing\" \"npm:dev:admin\"",
+    "dev:landing": "npm run dev --workspace=apps/landing",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "build": "npm run build --workspace=apps/landing && npm run build --workspace=apps/admin",
+    "lint": "npm run lint --workspace=apps/landing && npm run lint --workspace=apps/admin",
+    "db:generate": "npm run generate --workspace=packages/db",
+    "db:migrate": "npm run migrate --workspace=packages/db",
+    "db:push": "npm run push --workspace=packages/db",
+    "db:studio": "npm run studio --workspace=packages/db"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "dotenv": "^17.4.2",
-    "drizzle-kit": "^0.31.10",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "concurrently": "^9.1.0"
   }
 }
