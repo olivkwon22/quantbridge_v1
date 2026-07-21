@@ -4,6 +4,7 @@ import { db } from "@quantbridge/db";
 import { accounts } from "@quantbridge/db/schema";
 import { after } from "next/server";
 import { notifyNewLead } from "@/lib/notify-new-lead";
+import { captureEvent } from "@/lib/posthog";
 
 export type SignupState = {
   status: "idle" | "success" | "error";
@@ -76,6 +77,21 @@ export async function submitSignup(
       school,
       major,
       graduationYear: graduationYearRaw,
+      profession,
+    }),
+  );
+
+  after(() =>
+    captureEvent(email, "signup_submitted", {
+      firstName,
+      lastName,
+      email,
+      country,
+      sex: readOptionalString(formData, "sex"),
+      background,
+      school,
+      major,
+      graduationYear: graduationYearRaw ?? null,
       profession,
     }),
   );
